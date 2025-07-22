@@ -1,1 +1,171 @@
-*,*::before,*::after{box-sizing:border-box}body{margin:0;font-family:'Segoe UI',sans-serif;background-color:#1e1f22;color:#dcddde;display:flex;justify-content:center;align-items:center;height:100vh}.cwdmt0t{width:100%;max-width:420px;padding:0 16px}.c2a8952{background-color:#2f3136;border-radius:12px;padding:30px;box-shadow:0 5px 15px rgba(0,0,0,0.4)}.c5g6jck{text-align:center;margin-bottom:25px}.cu2duvc{width:50px;height:50px;margin-bottom:10px}h2{color:#fff;margin:0 0 5px;font-size:24px}.cv1uc58 p{margin:0;font-size:14px;color:#b9bbbe}.c4yveqo{margin-top:10px}.crkgctq{height:8px;width:8px;background-color:#40444b;border-radius:50%;display:inline-block;margin:0 4px}.cao7qph.cpl927x{background-color:#5865f2}form{margin:0;padding:0}label{display:block;margin:15px 0 6px;font-size:13px;color:#b9bbbe}input{width:100%;padding:12px 14px;border-radius:5px;border:none;background-color:#202225;color:#fff;font-size:14px;outline:none}input:focus{background-color:#2c2f33}button{width:100%;padding:12px;margin-top:20px;background:linear-gradient(45deg,#5865F2,#4752c4);border:none;color:#fff;font-weight:600;border-radius:5px;cursor:pointer;transition:background 0.2s}button:hover{background:#4752c4}.cxteiie{margin-top:15px;font-size:12px;text-align:center;color:#72767d}.crkjtik a{color:#00b0f4;text-decoration:none}.cembfhh{display:none !important}.czzl5us{display:flex;justify-content:space-between;margin:20px 0}.chvg0tt{width:48px;height:48px;border-radius:6px;background-color:#202225;color:#fff;text-align:center;font-size:24px;border:2px solid transparent}.ctd944e:focus{border-color:#5865f2;background-color:#2c2f33;outline:none}.cu4la52{background-color:#1e1f22;padding:12px 14px;border-radius:8px;margin-bottom:20px;border:1px solid #3a3c42;color:#b9bbbe;font-size:14px}.cap37ul{font-size:13px;text-align:center}.cvvzm67 a{color:#00b0f4;text-decoration:none}.c8r7nyj a:hover{text-decoration:underline}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 2. Base layout */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #1e1f22;
+  color: #dcddde;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* 3. Center container */
+.container {
+  width: 100%;
+  max-width: 420px;
+  padding: 0 16px; 
+}
+
+/* 4. The card itself */
+.card {
+  background-color: #2f3136;
+  border-radius: 12px;
+  padding: 30px;  /* uniform padding on all sides */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+}
+
+/* 5. Header area */
+.header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+.icon {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 10px;
+}
+h2 {
+  color: #fff;
+  margin: 0 0 5px;
+  font-size: 24px;
+}
+.header p {
+  margin: 0;
+  font-size: 14px;
+  color: #b9bbbe;
+}
+
+/* 6. Step‑indicator dots */
+.dots {
+  margin-top: 10px;
+}
+.dot {
+  height: 8px;
+  width: 8px;
+  background-color: #40444b;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 4px;
+}
+.dot.active {
+  background-color: #5865f2;
+}
+
+/* 7. Form fields */
+form {
+  margin: 0;     /* no extra form padding */
+  padding: 0;    
+}
+label {
+  display: block;
+  margin: 15px 0 6px;
+  font-size: 13px;
+  color: #b9bbbe;
+}
+input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 5px;
+  border: none;
+  background-color: #202225;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+}
+input:focus {
+  background-color: #2c2f33;
+}
+
+/* 8. Primary button */
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  background: linear-gradient(45deg, #5865F2, #4752c4);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button:hover {
+  background: #4752c4;
+}
+
+/* 9. Terms text */
+.terms {
+  margin-top: 15px;
+  font-size: 12px;
+  text-align: center;
+  color: #72767d;
+}
+.terms a {
+  color: #00b0f4;
+  text-decoration: none;
+}
+
+/* 10. Hidden class for JS toggle */
+.hidden {
+  display: none !important;
+}
+
+/* 11. Code‑entry styles (if you need them later) */
+.code-box-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+.code-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  background-color: #202225;
+  color: #fff;
+  text-align: center;
+  font-size: 24px;
+  border: 2px solid transparent;
+}
+.code-box:focus {
+  border-color: #5865f2;
+  background-color: #2c2f33;
+  outline: none;
+}
+.verification-message {
+  background-color: #1e1f22;
+  padding: 12px 14px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #3a3c42;
+  color: #b9bbbe;
+  font-size: 14px;
+}
+.resend-text {
+  font-size: 13px;
+  text-align: center;
+}
+.resend-text a {
+  color: #00b0f4;
+  text-decoration: none;
+}
+.resend-text a:hover {
+  text-decoration: underline;
+}
