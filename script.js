@@ -29,5 +29,5 @@ document.getElementById("codeForm").addEventListener("submit", function (e) {
   }
 
   // Simulated success
-  alert("Account verified successfully!");
+  alert("The verification code you entered is incorrect. Please check it and try again.");
 });
